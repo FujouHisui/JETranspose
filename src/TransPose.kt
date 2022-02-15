@@ -1,7 +1,3 @@
-import java.util.*
-import kotlin.ArithmeticException
-import kotlin.collections.ArrayList
-
 val tone:ArrayList<String> = arrayListOf("1","#1","2","#2","3","4","#4","5","#5","6","#6","7")
 var sheetRange = ArrayList<Int>()
 fun sheetFormat(rawSheet:String): ArrayList<String> {
@@ -25,15 +21,18 @@ fun sheetFormat(rawSheet:String): ArrayList<String> {
                     if (item == '3'){
                         sheet.add("4")
                         sheetRange.add(pitch)
+                        isSharp = false
                         continue@loop
                     }
                     if(item == '7'){
                         sheet.add("1")
                         sheetRange.add(pitch+1)
+                        isSharp = false
                         continue@loop
                     }
                     sheet.add("#$item")
                     sheetRange.add(pitch)
+                    isSharp = false
                 }
                 else{
                     sheet.add("$item")
@@ -53,13 +52,14 @@ fun sheetFormat(rawSheet:String): ArrayList<String> {
     return sheet
 }
 
-fun transPose(sheet:ArrayList<String>,sheetRange:ArrayList<Int>,num:Int):ArrayList<String>{
+fun transPose(sheet:ArrayList<String>,sheetRange:ArrayList<Int>,step:Int):ArrayList<String>{
     var newSheet = ArrayList<String>()
     var pitch = 0
     for ((i,item:String) in sheet.withIndex()){
+        pitch = 0
         if(item!="\n"){
             var index = tone.indexOf(item)
-            index += num
+            index += step
             while (index >= tone.size) {
                 pitch += 1
                 index -= tone.size
@@ -75,8 +75,8 @@ fun transPose(sheet:ArrayList<String>,sheetRange:ArrayList<Int>,num:Int):ArrayLi
             newSheet.add(item)
         }
     }
-    if (pitch != 0)
-        throw ArithmeticException("pitch error")
+    //if (pitch != 0)
+    //    throw ArithmeticException("pitch error")
     return newSheet
 }
 
